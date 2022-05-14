@@ -1,6 +1,78 @@
 #include "widget.h"
 
+const QString accessurl = "https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id=%1&client_secret=%2&";
+// 注意：使用自己的密钥对哦！
+const char * client_id = "hZIViGUH1si8lbvRSmuYvMOv";
+const char * client_secret = "GVGhfBXZ23CucSLv2d4cHZlVvhRbW1Yq";
 
+//const QString faceUrl = "https://aip.baidubce.com/rest/2.0/face/v3/detect?access_token=%1";
+const QString faceUrl = "https://aip.baidubce.com/rest/2.0/image-classify/v2/advanced_general?access_token=%1";
+
+void on_pushButton_clicked(const QString& imgPath)
+{
+
+
+    QString img = Image::ImageToBase64(imgPath);
+
+    QJsonObject post_data;
+    QJsonDocument document;
+    post_data.insert("image",img);
+    post_data.insert("image_type","BASE64");
+    post_data.insert("face_field","age,beauty,gender,expression");
+
+    document.setObject(post_data);
+    QByteArray post_param = document.toJson(QJsonDocument::Compact);
+
+
+    QByteArray requestData = post_param;
+
+    QString Url = QString(accessurl).arg(client_id).arg(client_secret);
+    // 获取access_token
+    QByteArray replyData;       // 保存回复的信息
+    QMap<QString,QString> header;       // 头部
+    header.insert(QString("Content-Type"),QString("application/json"));
+
+
+
+    QString accesstoken;
+    bool result = Http::post_sync(Url,header,requestData,replyData);
+    if(result)
+    {
+        qDebug()<< QSslSocket::sslLibraryBuildVersionString();
+        qDebug() << "assess_token hhh=====";
+        QJsonObject obj = QJsonDocument::fromJson(replyData).object();
+        accesstoken = obj.value("access_token").toString();
+    }else{
+        qDebug()<< QSslSocket::sslLibraryBuildVersionString();
+        qDebug() << "error Assess_token hhh=========" <<result;
+        return;
+    }
+
+    // 清除回复数据
+    replyData.clear();
+
+
+    QString imageUrl = faceUrl.arg(accesstoken);
+
+    result = Http::post_sync(imageUrl,header,requestData,replyData);
+
+    QJsonParseError json_error;
+    // QJsonDocument document = QJsonDocument::fromJson(replyData, &json_error);
+    document = QJsonDocument::fromJson(replyData,&json_error);
+    if(json_error.error == QJsonParseError::NoError)
+    {
+        //判断是否是对象,然后开始解析数据
+        if(document.isObject())
+        {
+            qDebug() << document;
+
+        }
+        qDebug() << "hhhhhhh+++=====================";
+    }else{
+        qDebug() << "error++++++++++++++++++++++=";
+    }
+
+}
 
 using namespace QtAndroid;
 
@@ -34,6 +106,8 @@ public:
             qDebug() << "captured image to - " << m_imagePath;
             qDebug() << "captured image exist - " << QFile::exists(m_imagePath);
             m_imageView->setPixmap(QPixmap(m_imagePath));
+            qDebug() << "+++++++++++++";
+            on_pushButton_clicked(m_imagePath);
         }
     }
 
@@ -174,11 +248,7 @@ void Widget::onCapture()
     CHECK_EXCEPTION()
 
 
-    this->sleep(2000);
-    QMessageBox* Msg =new QMessageBox(this->mainwindow);
 
-    Msg->setText("签到成功");
-    Msg->exec();
 }
 
 
@@ -188,3 +258,4 @@ void Widget::sleep(unsigned int msec)
     while( QTime::currentTime() < dieTime )
         QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
 }
+

@@ -1,8 +1,12 @@
 #include "mainwindow.h"
 
+
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
+
+
     //临时添加一部分，开始加载的动画
     QRect screenRect = QGuiApplication::primaryScreen()->geometry();
     const int screenW = screenRect.width();
@@ -23,6 +27,8 @@ MainWindow::MainWindow(QWidget *parent)
     this->makeset();
     qDebug() << "===========1==========2";
 }
+
+
 
 void MainWindow::SetupUI(){
 
@@ -215,7 +221,7 @@ void MainWindow::timeSlot(){
         int second = current_time.second();//当前的秒
         if(timesum == 0){
             timesum = hour*3600+ minute*60 + second + 5;
-            timeSum = 5;
+            timeSum = 3600;
         }else{
             timeSum = timesum - (hour*3600+ minute*60 + second);
         }
@@ -248,7 +254,7 @@ void MainWindow::timeA(){
         this->pinfo->takeset->num++;
         this->self->setnumChange();
         this->pinfo->findedSet = false;
-        this->userInfor1->setText("在线\n无座");
+        this->userInfor1->setStyleSheet("QLabel#userInfor1{border-image:url(:/images/无座)}");
         userInfor1->move(W*2/9,H*5/20-50);
         return;
     }
@@ -285,6 +291,8 @@ void MainWindow::mainwindowUI(const int screenW,const int screenH,QWidget* mainw
 //    underBGI->setPixmap(QPixmap::fromImage(img));
 //    underBGI->resize(screenW*3/4,screenH/5);
 //    underBGI->move(screenW/8,screenH/10);
+    qDebug() << "=======================";
+    placeXY = new GPSInfo;
 
 
     mainwindow->resize(screenW,screenH*27/30);
@@ -748,7 +756,7 @@ void MainWindow::backset(){
             QMessageBox* infor = new QMessageBox;
             infor->setText("您的座位已经退掉了哦！");
             this->userInfor1->setStyleSheet("QLabel#userInfor1{border-image:url(:/images/无座)}");
-            userInfor1->move(W*2/9,H*5/20-50);
+            userInfor1->move(this->W*1.75/9,this->H*5/20-50);
             //this->mainwindoInfor->setText("\t叶青鑫 在线 无座");
             //this->connecterInfor->setText("\t叶青鑫 在线 无座");
             infor->exec();
@@ -783,7 +791,7 @@ void MainWindow::connectAll(){
     connect(this->backSet,&QPushButton::clicked,this,&MainWindow::backset);
     connect(this->helpFindSet,&QPushButton::clicked,this,&MainWindow::nuller);
     connect(this->others,&QPushButton::clicked,this,&MainWindow::timerUI);
-    connect(this->qiandao,&QPushButton::clicked,this->camera,&Widget::onCapture);
+    connect(this->qiandao,&QPushButton::clicked,this,&MainWindow::check);
 
     connect(this->addFriend,&QPushButton::clicked,this,&MainWindow::nuller);
     connect(this->newFriend,&QPushButton::clicked,this,&MainWindow::nuller);
@@ -796,6 +804,29 @@ void MainWindow::connectAll(){
 
     connect(this->beiwangl,&QPushButton::clicked,this,&MainWindow::hidebeiwanglu);
     connect(this->backw,&QPushButton::clicked,this,&MainWindow::hidefankui);
+}
+
+void MainWindow::check(){
+    qDebug() << this->placeXY->nowLatitude << this->placeXY->nowLongitude;
+
+    if(this->placeXY->nowLatitude < 34.0367 &&
+            this->placeXY->nowLatitude > 34.0359 &&
+            this->placeXY->nowLongitude < 108.760600 &&
+            this->placeXY->nowLongitude > 108.760330){
+        if(this->pinfo->findedSet == true){
+            this->camera->onCapture();
+        }else{
+            QMessageBox* warning = new QMessageBox;
+            warning->setText("您没有座位哦，不能签到");
+            warning->exec();
+        }
+    }else{
+        QMessageBox* warning = new QMessageBox;
+        warning->setText("您不在图书馆哦，不能签到");
+        warning->exec();
+    }
+
+
 }
 
 
@@ -832,6 +863,7 @@ void MainWindow::showbeiwanglu(){
         beiwangluneirong->move(W/10,H*1.5/5);
         beiwangluneirong->setObjectName("beiwangluneirong");
         beiwangluneirong->setStyleSheet("QTextEdit#beiwangluneirong{background-color:transparent;}");
+        beiwangluneirong->setPlaceholderText("请输入您的备忘录哦");
         connect(this->beiwangl,&QPushButton::clicked,this,&MainWindow::hidebeiwanglu);
 
     }

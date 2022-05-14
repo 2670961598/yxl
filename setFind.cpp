@@ -12,6 +12,8 @@ setFind::setFind(const int W,const int H,info* acceptinfo,MainWindow* window){
     this->setupUI();
 
     this->connectAll();
+
+    this->initSet();
 }
 
 void setFind::setupUI(){
@@ -102,7 +104,7 @@ void setFind::makeset(){
 void setFind::planset(){
     for(int i = 0;i < 7;i++){
         for(int j = 0;j < 7;j++){
-            switch (this->myinfo->number[this->now][i][j]) {
+            switch (this->nowNumber[i][j]) {
             case 0:
                 this->scatter[i][j].setIcon(this->icon[0]);
                 this->scatter[i][j].setIconSize(QSize(screenW/6,screenH/30));
@@ -134,6 +136,26 @@ void setFind::changeSet(int x,const QString& text){
             this->nowNumber[i][j] = this->myinfo->number[x][i][j];
             this->scatter[i][j].area = text;
             qDebug() << this->scatter[i][j].area;
+            switch (this->myinfo->number[x][i][j]) {
+            case 0:
+                this->scatter[i][j].setStyleSheet("set#" + QString::number(i) + QString::number(j) + "{border-image:url(:/images/set0)}");
+                break;
+            case 1:
+                this->scatter[i][j].setStyleSheet("set#" + QString::number(i) + QString::number(j) + "{border-image:url(:/images/set1)}");
+                break;
+            case 2:
+                this->scatter[i][j].setStyleSheet("set#" + QString::number(i) + QString::number(j) + "{border-image:url(:/images/set2)}");
+                break;
+            case 3:
+                this->scatter[i][j].setStyleSheet("set#" + QString::number(i) + QString::number(j) + "{border-image:url(:/images/set3)}");
+                break;
+            case 4:
+                this->scatter[i][j].setStyleSheet("set#" + QString::number(i) + QString::number(j) + "{border-image:url(:/images/set4)}");
+                break;
+            default:
+                break;
+            }
+            //this->mainwindow->pinfo->takeset->area = text;
             //qDebug() << this->mainwindow->pinfo->takeset->area = text;
         }
     }
@@ -181,7 +203,9 @@ void setFind::setnumChange(){
         for(int j = 0;j < 7;j++){
             this->nowNumber[i][j] = this->scatter[i][j].num;
             this->myinfo->number[now][i][j] = this->scatter[i][j].num;
+            qDebug() <<this->scatter[i][j].num;
         }
+        qDebug() << "\n";
     }
 }
 
@@ -259,82 +283,7 @@ void setFind::show(){
 
 
 void setFind::showA(){
-    this->AW = new QWidget;
-    AW->setObjectName("AW");
 
-
-//    this->scatter[i][j].setParent(setwindow);
-//    this->scatter[i][j].x = i;
-//    this->scatter[i][j].y = j;
-//    this->scatter[i][j].area = "图书馆一楼";
-//    this->scatter[i][j].resize(screenW/6,screenH/30);
-//    this->scatter[i][j].move(screenW/12+i*screenW/6,screenH/3+j*screenH/30);
-    qDebug() << "==============---------==========";
-    for(int i = 0;i < 1;i++){
-        for(int j = 0;j < 7;j++){
-            //connect(&this->scatter[i][j],&set::clicked,this,&setFind::checkset);
-
-            this->scatter[i][j].setParent(AW);
-            this->scatter[i][j].area = "第一楼";
-            this->scatter[i][j].resize(screenW*5/40,screenH/30);
-            this->scatter[i][j].setObjectName(QString::number(i) + QString::number(j));
-            //qDebug() << QString::number(this->mainwindow->pinfo->number[0][i][j]) << "   898989";
-            this->scatter[i][j].num = this->mainwindow->pinfo->number[0][i][j];
-            switch (this->mainwindow->pinfo->number[0][i][j]) {
-            case 0:
-                this->scatter[i][j].setStyleSheet("set#" + QString::number(i) + QString::number(j) + "{border-image:url(:/images/set0)}");
-                break;
-            case 1:
-                this->scatter[i][j].setStyleSheet("set#" + QString::number(i) + QString::number(j) + "{border-image:url(:/images/set1)}");
-                break;
-            case 2:
-                this->scatter[i][j].setStyleSheet("set#" + QString::number(i) + QString::number(j) + "{border-image:url(:/images/set2)}");
-                break;
-            case 3:
-                this->scatter[i][j].setStyleSheet("set#" + QString::number(i) + QString::number(j) + "{border-image:url(:/images/set3)}");
-                break;
-            case 4:
-                this->scatter[i][j].setStyleSheet("set#" + QString::number(i) + QString::number(j) + "{border-image:url(:/images/set4)}");
-                break;
-            default:
-                break;
-            this->scatter[i][j].hide();
-            }
-        }
-    }
-
-    for(int i = 1;i < 2;i++){
-        for(int j = 0;j < 2;j++){
-            //connect(&this->scatter[i][j],&set::clicked,this,&setFind::checkset);
-
-            this->scatter[i][j].setParent(AW);
-            this->scatter[i][j].area = "第一楼";
-            this->scatter[i][j].resize(screenW*5/40,screenH/30);
-            this->scatter[i][j].setObjectName(QString::number(i) + QString::number(j));
-            //qDebug() << QString::number(this->mainwindow->pinfo->number[0][i][j]) << "   898989";
-            this->scatter[i][j].num = this->mainwindow->pinfo->number[0][i][j];
-            switch (this->mainwindow->pinfo->number[0][i][j]) {
-            case 0:
-                this->scatter[i][j].setStyleSheet("set#" + QString::number(i) + QString::number(j) + "{border-image:url(:/images/set0)}");
-                break;
-            case 1:
-                this->scatter[i][j].setStyleSheet("set#" + QString::number(i) + QString::number(j) + "{border-image:url(:/images/set1)}");
-                break;
-            case 2:
-                this->scatter[i][j].setStyleSheet("set#" + QString::number(i) + QString::number(j) + "{border-image:url(:/images/set2)}");
-                break;
-            case 3:
-                this->scatter[i][j].setStyleSheet("set#" + QString::number(i) + QString::number(j) + "{border-image:url(:/images/set3)}");
-                break;
-            case 4:
-                this->scatter[i][j].setStyleSheet("set#" + QString::number(i) + QString::number(j) + "{border-image:url(:/images/set4)}");
-                break;
-            default:
-                break;
-            this->scatter[i][j].hide();
-            }
-        }
-    }
 
     QLabel* shujia = new QLabel[9];
     for(int i = 0;i < 9;i++){
@@ -433,71 +382,7 @@ void setFind::showA(){
 }
 
 void setFind::showB(){
-    this->BW = new QWidget;
-    BW->setObjectName("BW");
 
-    for(int i = 1;i < 2;i++){
-        for(int j = 2;j < 7;j++){
-            //connect(&this->scatter[i][j],&set::clicked,this,&setFind::checkset);
-            this->scatter[i][j].setParent(BW);
-            this->scatter[i][j].area = "第一楼";
-            this->scatter[i][j].resize(screenW*5/40,screenH/30);
-            this->scatter[i][j].setObjectName(QString::number(i) + QString::number(j));
-            //qDebug() << QString::number(this->mainwindow->pinfo->number[0][i][j]) << "   898989";
-            this->scatter[i][j].num = this->mainwindow->pinfo->number[0][i][j];
-            switch (this->mainwindow->pinfo->number[0][i][j]) {
-            case 0:
-                this->scatter[i][j].setStyleSheet("set#" + QString::number(i) + QString::number(j) + "{border-image:url(:/images/set0)}");
-                break;
-            case 1:
-                this->scatter[i][j].setStyleSheet("set#" + QString::number(i) + QString::number(j) + "{border-image:url(:/images/set1)}");
-                break;
-            case 2:
-                this->scatter[i][j].setStyleSheet("set#" + QString::number(i) + QString::number(j) + "{border-image:url(:/images/set2)}");
-                break;
-            case 3:
-                this->scatter[i][j].setStyleSheet("set#" + QString::number(i) + QString::number(j) + "{border-image:url(:/images/set3)}");
-                break;
-            case 4:
-                this->scatter[i][j].setStyleSheet("set#" + QString::number(i) + QString::number(j) + "{border-image:url(:/images/set4)}");
-                break;
-            default:
-                break;
-            this->scatter[i][j].hide();
-            }
-        }
-    }
-    for(int i = 2;i < 3;i++){
-        for(int j = 0;j < 7;j++){
-            //connect(&this->scatter[i][j],&set::clicked,this,&setFind::checkset);
-            this->scatter[i][j].setParent(BW);
-            this->scatter[i][j].area = "第一楼";
-            this->scatter[i][j].resize(screenW*5/40,screenH/30);
-            this->scatter[i][j].setObjectName(QString::number(i) + QString::number(j));
-            //qDebug() << QString::number(this->mainwindow->pinfo->number[0][i][j]) << "   898989";
-            this->scatter[i][j].num = this->mainwindow->pinfo->number[0][i][j];
-            switch (this->mainwindow->pinfo->number[0][i][j]) {
-            case 0:
-                this->scatter[i][j].setStyleSheet("set#" + QString::number(i) + QString::number(j) + "{border-image:url(:/images/set0)}");
-                break;
-            case 1:
-                this->scatter[i][j].setStyleSheet("set#" + QString::number(i) + QString::number(j) + "{border-image:url(:/images/set1)}");
-                break;
-            case 2:
-                this->scatter[i][j].setStyleSheet("set#" + QString::number(i) + QString::number(j) + "{border-image:url(:/images/set2)}");
-                break;
-            case 3:
-                this->scatter[i][j].setStyleSheet("set#" + QString::number(i) + QString::number(j) + "{border-image:url(:/images/set3)}");
-                break;
-            case 4:
-                this->scatter[i][j].setStyleSheet("set#" + QString::number(i) + QString::number(j) + "{border-image:url(:/images/set4)}");
-                break;
-            default:
-                break;
-            this->scatter[i][j].hide();
-            }
-        }
-    }
 
     QLabel* penzai = new QLabel(BW);
     penzai->resize(screenW/6,screenW/6);
@@ -634,39 +519,7 @@ void setFind::showB(){
 }
 
 void setFind::showC(){
-    this->CW = new QWidget;
-    CW->setObjectName("CW");
-    for(int i = 3;i < 5;i++){
-        for(int j = 0;j < 7;j++){
-            //connect(&this->scatter[i][j],&set::clicked,this,&setFind::checkset);
-            this->scatter[i][j].setParent(CW);
-            this->scatter[i][j].area = "第一楼";
-            this->scatter[i][j].resize(screenW*5/40,screenH/30);
-            this->scatter[i][j].setObjectName(QString::number(i) + QString::number(j));
-            qDebug() << QString::number(this->mainwindow->pinfo->number[0][i][j]) << "   898989";
-            this->scatter[i][j].num = this->mainwindow->pinfo->number[0][i][j];
-            switch (this->mainwindow->pinfo->number[0][i][j]) {
-            case 0:
-                this->scatter[i][j].setStyleSheet("set#" + QString::number(i) + QString::number(j) + "{border-image:url(:/images/set0)}");
-                break;
-            case 1:
-                this->scatter[i][j].setStyleSheet("set#" + QString::number(i) + QString::number(j) + "{border-image:url(:/images/set1)}");
-                break;
-            case 2:
-                this->scatter[i][j].setStyleSheet("set#" + QString::number(i) + QString::number(j) + "{border-image:url(:/images/set2)}");
-                break;
-            case 3:
-                this->scatter[i][j].setStyleSheet("set#" + QString::number(i) + QString::number(j) + "{border-image:url(:/images/set3)}");
-                break;
-            case 4:
-                this->scatter[i][j].setStyleSheet("set#" + QString::number(i) + QString::number(j) + "{border-image:url(:/images/set4)}");
-                break;
-            default:
-                break;
-            this->scatter[i][j].hide();
-            }
-        }
-    }
+
     scatter[3][0].x = 1;
     scatter[3][0].y = 1;
     scatter[3][1].x = 2;
@@ -711,8 +564,6 @@ void setFind::showC(){
     this->scatter[4][4].move(screenW*7/16,screenH*11.5/30);
     this->scatter[4][5].move(screenW*7/16,screenH*17.5/30);
     this->scatter[4][6].move(screenW*7/16,screenH*20.5/30);
-
-
     QLabel* penzai = new QLabel(CW);
     penzai->resize(screenW/6,screenW/6);
     penzai->move(screenW*5/12,screenH/2-screenW/12);
@@ -787,6 +638,186 @@ void setFind::showC(){
 
     CW->setStyleSheet("QWidget#CW{border-image:url(:/images/login)}");
     CW->show();
+}
+
+void setFind::initSet(){
+    this->AW = new QWidget;
+    AW->setObjectName("AW");
+
+
+//    this->scatter[i][j].setParent(setwindow);
+//    this->scatter[i][j].x = i;
+//    this->scatter[i][j].y = j;
+//    this->scatter[i][j].area = "图书馆一楼";
+//    this->scatter[i][j].resize(screenW/6,screenH/30);
+//    this->scatter[i][j].move(screenW/12+i*screenW/6,screenH/3+j*screenH/30);
+    qDebug() << "==============---------==========";
+    for(int i = 0;i < 1;i++){
+        for(int j = 0;j < 7;j++){
+            //connect(&this->scatter[i][j],&set::clicked,this,&setFind::checkset);
+
+            this->scatter[i][j].setParent(AW);
+            this->scatter[i][j].area = "第一楼";
+            this->scatter[i][j].resize(screenW*5/40,screenH/30);
+            this->scatter[i][j].setObjectName(QString::number(i) + QString::number(j));
+            //qDebug() << QString::number(this->mainwindow->pinfo->number[0][i][j]) << "   898989";
+            this->scatter[i][j].num = this->mainwindow->pinfo->number[0][i][j];
+            switch (this->mainwindow->pinfo->number[0][i][j]) {
+            case 0:
+                this->scatter[i][j].setStyleSheet("set#" + QString::number(i) + QString::number(j) + "{border-image:url(:/images/set0)}");
+                break;
+            case 1:
+                this->scatter[i][j].setStyleSheet("set#" + QString::number(i) + QString::number(j) + "{border-image:url(:/images/set1)}");
+                break;
+            case 2:
+                this->scatter[i][j].setStyleSheet("set#" + QString::number(i) + QString::number(j) + "{border-image:url(:/images/set2)}");
+                break;
+            case 3:
+                this->scatter[i][j].setStyleSheet("set#" + QString::number(i) + QString::number(j) + "{border-image:url(:/images/set3)}");
+                break;
+            case 4:
+                this->scatter[i][j].setStyleSheet("set#" + QString::number(i) + QString::number(j) + "{border-image:url(:/images/set4)}");
+                break;
+            default:
+                break;
+            this->scatter[i][j].hide();
+            }
+        }
+    }
+
+    for(int i = 1;i < 2;i++){
+        for(int j = 0;j < 2;j++){
+            //connect(&this->scatter[i][j],&set::clicked,this,&setFind::checkset);
+
+            this->scatter[i][j].setParent(AW);
+            this->scatter[i][j].area = "第一楼";
+            this->scatter[i][j].resize(screenW*5/40,screenH/30);
+            this->scatter[i][j].setObjectName(QString::number(i) + QString::number(j));
+            //qDebug() << QString::number(this->mainwindow->pinfo->number[0][i][j]) << "   898989";
+            this->scatter[i][j].num = this->mainwindow->pinfo->number[0][i][j];
+            switch (this->mainwindow->pinfo->number[0][i][j]) {
+            case 0:
+                this->scatter[i][j].setStyleSheet("set#" + QString::number(i) + QString::number(j) + "{border-image:url(:/images/set0)}");
+                break;
+            case 1:
+                this->scatter[i][j].setStyleSheet("set#" + QString::number(i) + QString::number(j) + "{border-image:url(:/images/set1)}");
+                break;
+            case 2:
+                this->scatter[i][j].setStyleSheet("set#" + QString::number(i) + QString::number(j) + "{border-image:url(:/images/set2)}");
+                break;
+            case 3:
+                this->scatter[i][j].setStyleSheet("set#" + QString::number(i) + QString::number(j) + "{border-image:url(:/images/set3)}");
+                break;
+            case 4:
+                this->scatter[i][j].setStyleSheet("set#" + QString::number(i) + QString::number(j) + "{border-image:url(:/images/set4)}");
+                break;
+            default:
+                break;
+            this->scatter[i][j].hide();
+            }
+        }
+    }
+    this->BW = new QWidget;
+    BW->setObjectName("BW");
+
+    for(int i = 1;i < 2;i++){
+        for(int j = 2;j < 7;j++){
+            //connect(&this->scatter[i][j],&set::clicked,this,&setFind::checkset);
+            this->scatter[i][j].setParent(BW);
+            this->scatter[i][j].area = "第一楼";
+            this->scatter[i][j].resize(screenW*5/40,screenH/30);
+            this->scatter[i][j].setObjectName(QString::number(i) + QString::number(j));
+            //qDebug() << QString::number(this->mainwindow->pinfo->number[0][i][j]) << "   898989";
+            this->scatter[i][j].num = this->mainwindow->pinfo->number[0][i][j];
+            switch (this->mainwindow->pinfo->number[0][i][j]) {
+            case 0:
+                this->scatter[i][j].setStyleSheet("set#" + QString::number(i) + QString::number(j) + "{border-image:url(:/images/set0)}");
+                break;
+            case 1:
+                this->scatter[i][j].setStyleSheet("set#" + QString::number(i) + QString::number(j) + "{border-image:url(:/images/set1)}");
+                break;
+            case 2:
+                this->scatter[i][j].setStyleSheet("set#" + QString::number(i) + QString::number(j) + "{border-image:url(:/images/set2)}");
+                break;
+            case 3:
+                this->scatter[i][j].setStyleSheet("set#" + QString::number(i) + QString::number(j) + "{border-image:url(:/images/set3)}");
+                break;
+            case 4:
+                this->scatter[i][j].setStyleSheet("set#" + QString::number(i) + QString::number(j) + "{border-image:url(:/images/set4)}");
+                break;
+            default:
+                break;
+            this->scatter[i][j].hide();
+            }
+        }
+    }
+    for(int i = 2;i < 3;i++){
+        for(int j = 0;j < 7;j++){
+            //connect(&this->scatter[i][j],&set::clicked,this,&setFind::checkset);
+            this->scatter[i][j].setParent(BW);
+            this->scatter[i][j].area = "第一楼";
+            this->scatter[i][j].resize(screenW*5/40,screenH/30);
+            this->scatter[i][j].setObjectName(QString::number(i) + QString::number(j));
+            //qDebug() << QString::number(this->mainwindow->pinfo->number[0][i][j]) << "   898989";
+            this->scatter[i][j].num = this->mainwindow->pinfo->number[0][i][j];
+            switch (this->mainwindow->pinfo->number[0][i][j]) {
+            case 0:
+                this->scatter[i][j].setStyleSheet("set#" + QString::number(i) + QString::number(j) + "{border-image:url(:/images/set0)}");
+                break;
+            case 1:
+                this->scatter[i][j].setStyleSheet("set#" + QString::number(i) + QString::number(j) + "{border-image:url(:/images/set1)}");
+                break;
+            case 2:
+                this->scatter[i][j].setStyleSheet("set#" + QString::number(i) + QString::number(j) + "{border-image:url(:/images/set2)}");
+                break;
+            case 3:
+                this->scatter[i][j].setStyleSheet("set#" + QString::number(i) + QString::number(j) + "{border-image:url(:/images/set3)}");
+                break;
+            case 4:
+                this->scatter[i][j].setStyleSheet("set#" + QString::number(i) + QString::number(j) + "{border-image:url(:/images/set4)}");
+                break;
+            default:
+                break;
+            this->scatter[i][j].hide();
+            }
+        }
+    }
+
+    this->CW = new QWidget;
+    CW->setObjectName("CW");
+    for(int i = 3;i < 5;i++){
+        for(int j = 0;j < 7;j++){
+            //connect(&this->scatter[i][j],&set::clicked,this,&setFind::checkset);
+            this->scatter[i][j].setParent(CW);
+            this->scatter[i][j].area = "第一楼";
+            this->scatter[i][j].resize(screenW*5/40,screenH/30);
+            this->scatter[i][j].setObjectName(QString::number(i) + QString::number(j));
+            qDebug() << QString::number(this->mainwindow->pinfo->number[0][i][j]) << "   898989";
+            this->scatter[i][j].num = this->mainwindow->pinfo->number[0][i][j];
+            switch (this->mainwindow->pinfo->number[0][i][j]) {
+            case 0:
+                this->scatter[i][j].setStyleSheet("set#" + QString::number(i) + QString::number(j) + "{border-image:url(:/images/set0)}");
+                break;
+            case 1:
+                this->scatter[i][j].setStyleSheet("set#" + QString::number(i) + QString::number(j) + "{border-image:url(:/images/set1)}");
+                break;
+            case 2:
+                this->scatter[i][j].setStyleSheet("set#" + QString::number(i) + QString::number(j) + "{border-image:url(:/images/set2)}");
+                break;
+            case 3:
+                this->scatter[i][j].setStyleSheet("set#" + QString::number(i) + QString::number(j) + "{border-image:url(:/images/set3)}");
+                break;
+            case 4:
+                this->scatter[i][j].setStyleSheet("set#" + QString::number(i) + QString::number(j) + "{border-image:url(:/images/set4)}");
+                break;
+            default:
+                break;
+            this->scatter[i][j].hide();
+            }
+        }
+    }
+
+
 }
 
 setFind::~setFind(){}

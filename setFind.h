@@ -97,6 +97,8 @@ public:
     //将座位上的信息反映射到数组中。
     void setnumChange();
 
+    void initSet();
+
 public slots:
     //下拉列表的更改触发的槽函数
     void comboboxChanged(const QString& text);

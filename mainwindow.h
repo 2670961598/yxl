@@ -24,8 +24,11 @@
 #include <QPropertyAnimation>
 #include "widget.h"
 #include <QTimer>
-
-
+#include <QGeoPositionInfoSource>
+#include <QGeoPositionInfo>
+#include <QGeoCoordinate>
+#include <QTime>
+#include "gpsinfo.h"
 
 class MainWindow : public QMainWindow
 {
@@ -36,6 +39,11 @@ public:
     //窗口大小
     int W;
     int H;
+
+    GPSInfo* placeXY;
+
+    double xPlace = 0;
+    double yPlace = 0;
 
     //自己的关于座位的信息
     info* pinfo;
@@ -69,6 +77,9 @@ public:
     QLabel* userInfor2;
     QLabel* userInfor3;
 
+    QGeoPositionInfoSource* position = QGeoPositionInfoSource::createDefaultSource(this);
+
+    QGeoPositionInfo* nowPosition = new QGeoPositionInfo;
 
     QLabel* mainwindoInfor;
     QLabel* connecterInfor;
@@ -147,6 +158,8 @@ public:
 
 public slots:
     //槽函数
+
+    void check();
 
     void timeA();
 

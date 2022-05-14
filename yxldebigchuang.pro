@@ -1,7 +1,8 @@
 QT       += core gui
 QT       += androidextras
 QT       += multimedia multimediawidgets
-
+QT       += positioning
+QT       += network
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++11
@@ -13,6 +14,9 @@ CONFIG += c++11
 SOURCES += \
     friends.cpp \
     gcarouselfigurewidget.cpp \
+    gpsinfo.cpp \
+    http.cpp \
+    image.cpp \
     login.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -23,6 +27,9 @@ SOURCES += \
 HEADERS += \
     friends.h \
     gcarouselfigurewidget.h \
+    gpsinfo.h \
+    http.h \
+    image.h \
     login.h \
     mainwindow.h \
     set.h \

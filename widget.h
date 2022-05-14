@@ -1,6 +1,6 @@
 #ifndef WIDGET_H
 #define WIDGET_H
-
+#include <QSslSocket>
 #include <QWidget>
 #include <QLineEdit>
 #include <QTextEdit>
@@ -17,6 +17,17 @@
 #include <QDateTime>
 #include <QFile>
 #include <QMessageBox>
+#include <QBuffer>
+#include <QMap>
+#include <QJsonObject>
+#include <QJsonDocument>
+#include <QJsonArray>
+#include "http.h"
+#include "image.h"
+
+#include <QJsonParseError>
+
+
 class Widget : public QWidget
 {
     Q_OBJECT

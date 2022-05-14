@@ -47,6 +47,19 @@ bool requestPermission3()
    }
    return true;
 }
+
+bool requestPermission4()
+{
+    QtAndroid::PermissionResult r = QtAndroid::checkPermission("android.permission.ACCESS_FINE_LOCATION");
+    if(r == QtAndroid::PermissionResult::Denied) {
+        QtAndroid::requestPermissionsSync(QStringList()<<"android.permission.ACCESS_FINE_LOCATION");
+        r = QtAndroid::checkPermission("android.permission.ACCESS_FINE_LOCATION");
+        if(r == QtAndroid::PermissionResult::Denied) {
+             return false;
+        }
+   }
+   return true;
+}
 void sleep(unsigned int msec)
 {
     QTime dieTime = QTime::currentTime().addMSecs(msec);
@@ -73,7 +86,7 @@ int main(int argc, char *argv[])
     qDebug() << "1"<< requestPermission1();
     qDebug() << "2"<<requestPermission2();
     qDebug() << "3"<< requestPermission3();
-
+    qDebug() << "4"<<requestPermission4();
 
     //w.mainwindow->show();
     return a.exec();
